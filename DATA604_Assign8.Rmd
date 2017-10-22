@@ -1,0 +1,112 @@
+---
+title: "DATA604 - Week8"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**PACKAGES**
+
+```{r, echo=TRUE,message=FALSE, warning=FALSE}
+library(fitdistrplus)
+library(MASS)
+library(httr)
+library(DiscreteInverseWeibull)
+```
+
+**DATA SOURCES**
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+
+data1 <- "https://raw.githubusercontent.com/Misterresearch/DATA604/master/Problem_Dataset_06_01.csv"
+
+data2 <- "https://raw.githubusercontent.com/Misterresearch/DATA604/master/Problem_Dataset_06_02.csv"
+
+data3 <- "https://raw.githubusercontent.com/Misterresearch/DATA604/master/Problem_Dataset_06_03.csv"
+
+dataTB1 <- read.csv(file = data1, header = FALSE, sep = ',', na.strings = "NA")
+dataTB2 <- read.csv(file = data2, header = FALSE, sep = ',', na.strings = "NA")
+dataTB3 <- read.csv(file = data3, header = FALSE, sep = ',', na.strings = "NA")
+
+```
+
+**DISTRIBUTION PLOTS & RECOMMENDATION Q1-3**
+
+Kelton Chapter6, Q1-3. Please see the plots of the interarrival times for each data set, as well as the recommendation for best distribution - followed by the appropriate Simio setting.
+
+Q1 - (see below),
+
+criteria #1 - continuous
+criteria #2 - Asymetric
+crtiteria # - all positive
+
+Recommendation: Exponential Distribution
+Simio expression: Random.Exponential(.083)
+
+Q2 - (see below),
+
+criteria #1 - continuous
+criteria #2 - Asymetric
+crtiteria # - some positive
+
+Recommendation: Weibull
+Simio expression:Random.Weibull(1.88 , 12.36)
+
+
+Q3 - (see below),
+
+criteria #1 - discreter
+criteria #2 - Asymetric
+crtiteria # - all positive
+
+Recommendation: Geometric
+Simio expression: Random.Geometric(.25)
+
+```{r,echo=TRUE, message=FALSE, warning=FALSE}
+
+plotdist(dataTB1$V1, histo = TRUE, demp = TRUE)
+fitdist(dataTB1$V1, distr = "exp", method = c("mle","mme", "qme", "mge"), start=NULL, fix.arg = NULL, discrete = FALSE, keepdata = TRUE)
+
+plotdist(dataTB2$V1, histo = TRUE, demp = TRUE)
+fitdist(dataTB2$V1, distr = "weibull", method = c("mle","mme", "qme", "mge"), start=NULL, fix.arg = NULL, discrete = FALSE, keepdata = TRUE)
+
+plotdist(dataTB3$V1, histo = TRUE, demp = TRUE)
+fitdistr(dataTB3$V1, "geometric")
+```
+
+**DISTRIBUTION PLOTS & RECOMMENDATION Q4 & 5**
+
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+
+#solution for Q4
+qnorm(runif(20))
+
+#soultion for q5
+q <- .6
+beta <- 3
+x <-1:40
+ahrdiweibull(x, q, beta)
+
+```
+
+
+
+Sources:
+
+[Distribution choices](https://2.bp.blogspot.com/-SpjgitfNMb0/TteevRR_Y2I/AAAAAAAAAFQ/IZgd32z2AI8/s1600/distributions.png)
+
+[Fitting distributions with R](https://www.r-bloggers.com/fitting-distributions-with-r/)
+
+[MASS::fitdistr](https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/fitdistr.html)
+
+[CDF](http://www.r-tutor.com/elementary-statistics/probability-distributions/continuous-uniform-distribution)
+
+[simulation by inverse cdf](https://www.r-bloggers.com/simulation-by-inverse-cdf/)
+
+
